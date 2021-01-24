@@ -1,8 +1,10 @@
 var BG = chrome.extension.getBackgroundPage();
 var tabid;
+var tabTitle;
 chrome.windows.getCurrent(function(wnd){
     chrome.tabs.getSelected(wnd.id, function(tab){
         tabid = tab.id;
+        tabTitle = tab.title;
         var id="tabid"+tab.id;
         ShowMedia(BG.mediaurls[id]);
     });
@@ -119,6 +121,7 @@ function AddMedia(data){
     //复制
     $('#medialist #copy').off().on('click',function(){
         url = $(this).parents().find('.url a').attr('href');
+        url = "ffmpeg -i '" + url + "' -vcodec copy -acodec copy -absf aac_adtstoasc '" + tabTitle + ".mp4'";
         var text = $('<input id="copy_tmp" value="'+url+'" />');
         $('body').append(text);
         text.select();
